@@ -1,52 +1,22 @@
-symptom(amit,fever).
-    symptom(amit,rash).
-    symptom(amit,headache).
-    symptom(amit,runny_nose).
+% Facts about symptoms and possible diseases
+symptom(john, fever).
+symptom(john, cough).
+symptom(jane, headache).
+symptom(jane, nausea).
 
-    symptom(kaushal,chills).
-    symptom(kaushal,fever).
-    symptom(kaushal,hedache).
+disease(fever, flu).
+disease(cough, cold).
+disease(headache, stress).
+disease(nausea, flu).
 
-    symptom(dipen,runny_nose).
-    symptom(dipen,rash).
-    symptom(dipen,flu).
+% Rule to diagnose a disease based on symptoms
+diagnose(Person, Disease) :-
+    symptom(Person, Symptom),
+    disease(Symptom, Disease).
 
-
-    hypothesis(Patient,measels):-
-        symptom(Patient,fever),
-        symptom(Patient,cough),
-        symptom(Patient,conjunctivitis),
-        symptom(Patient,rash),
-        write('Eat Salad').
-
-    hypothesis(Patient,german_measles) :-
-        symptom(Patient,fever),
-        symptom(Patient,headache),
-        symptom(Patient,runny_nose),
-        symptom(Patient,rash),
-        write('Avoid Oily Food').
-
-    hypothesis(Patient,flu) :-
-% Facts: Symptoms and Conditions
-symptom(fever, flu).
-symptom(cough, flu).
-symptom(cough, cold).
-symptom(headache, flu).
-symptom(sore_throat, cold).
-symptom(runny_nose, cold).
-symptom(runny_nose, allergy).
-
-% Rule: Diagnosis based on Symptoms
-diagnose_patient(Symptoms) :-
-    member(Symptom, Symptoms),
-    symptom(Symptom, Diagnosis),
-    format('The patient may have ~w.~n', [Diagnosis]).
-
-% Interactive Interface
-patient_diagnosis :-
-    write('Enter symptoms (comma-separated): '),
-    read(Symptoms),
-    diagnose_patient(Symptoms).
-
-% Example Usage:
-% Run the query patient_diagnosis. and input symptoms when prompted.
+% Example queries
+% What disease does John have?
+% ?- diagnose(john, Disease).
+%
+% What disease does Jane have?
+% ?- diagnose(jane, Disease).
