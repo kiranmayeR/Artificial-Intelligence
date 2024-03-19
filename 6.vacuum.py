@@ -1,34 +1,22 @@
-class VacuumCleaner:
-    def __init__(self, grid):
-        self.grid, self.pos = grid, (0, 0)
+def clean(floor):
+    for i in range(len(floor)):
+        for j in range(len(floor[0])):
+            if floor[i][j] == 1:
+                print_floor(floor, i, j)
+                floor[i][j] = 0
+                print_floor(floor, i, j)
 
-    def move(self, direction):
-        moves = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
-        new_pos = (self.pos[0] + moves[direction][0], self.pos[1] + moves[direction][1])
-        if all(0 <= coord < len(self.grid) for coord in new_pos):
-            self.pos = new_pos
+def print_floor(floor, row, col):
+    for r in range(len(floor)):
+        for c in range(len(floor[0])):
+            print(f" >{floor[r][c]}< " if r == row and c == col else f"  {floor[r][c]}  ", end='')
+        print()
 
-    def clean(self):
-        if self.grid[self.pos[0]][self.pos[1]] == 1:
-            print(f"Cleaning cell at {self.pos}")
-            self.grid[self.pos[0]][self.pos[1]] = 0
-        else:
-            print(f"Cell at {self.pos} is already clean.")
+def main():
+    m = int(input("Enter the No. of Rows: "))
+    n = int(input("Enter the No. of Columns: "))
+    print("Enter clean status for each cell (1 - dirty, 0 - clean)")
+    floor = [list(map(int, input().split())) for _ in range(m)]
+    clean(floor)
 
-    def clean_all_cells(self):
-        while any(1 in row for row in self.grid):
-            self.clean()
-            self.move("right" if self.pos[0] % 2 == 0 and self.pos[1] < len(self.grid[0]) - 1 else "down")
-            self.move("left" if self.pos[0] % 2 == 1 and self.pos[1] > 0 else "down")
-
-
-# Example usage:
-grid_example = [
-    [1, 0, 1, 0, 1],
-    [0, 1, 0, 1, 0],
-    [1, 1, 1, 0, 1],
-    [0, 0, 0, 1, 0],
-]
-
-vacuum = VacuumCleaner(grid_example)
-vacuum.clean_all_cells()
+main()
