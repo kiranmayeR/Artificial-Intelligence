@@ -1,43 +1,33 @@
-def print_board(board):
-    for row in board:
-        print(" ".join(row))
-    print()
+BOARD_SIZE = 8
 
-def is_safe(board, row, col):
-    # Check if there is a queen in the same column
-    for i in range(row):
-        if board[i][col] == 'Q':
-            return False
+def under_attack(col, queens):
+    left = right = col
+    for r, c in reversed(queens):
+        left, right = left-1, right+1
+        if c in (left, col, right):
+            return True
+    return False
 
-    # Check if there is a queen in the left diagonal
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j] == 'Q':
-            return False
+def solve(n):
+    if n == 0: return [[]]
+    smaller_solutions = solve(n-1)
+    solutions = []
+    for i in range(BOARD_SIZE):
+        for solution in smaller_solutions:
+            if not under_attack(i+1, solution):
+                solutions.append(solution + [(n,i+1)])
+    return solutions
 
-    # Check if there is a queen in the right diagonal
-    for i, j in zip(range(row, -1, -1), range(col, len(board))):
-        if board[i][j] == 'Q':
-            return False
+for answer in solve(BOARD_SIZE):
+    if len(answer) == BOARD_SIZE:
+        print(answer)
+        break
 
-    return True
-
-def solve_queens(board, row):
-    if row == len(board):
-        # All queens are placed, print the solution
-        print_board(board)
-        return
-
-    for col in range(len(board)):
-        if is_safe(board, row, col):
-            # Place queen and move to the next row
-            board[row][col] = 'Q'
-            solve_queens(board, row + 1)
-            # Backtrack by removing the queen
-            board[row][col] = '.'
-
-if __name__ == "__main__":
-    # Initialize an 8x8 chessboard with empty cells
-    chessboard = [['.' for _ in range(8)] for _ in range(8)]
-
-    # Start placing queens from the first row
-    solve_queens(chessboard, 0)
+# Print chessboard with queens
+for i in range(8):
+    for j in range(8):
+        if (i+1, j+1) in answer:
+            print('Q', end=' ')
+        else:
+            print('-', end=' ')
+    print('\n')
